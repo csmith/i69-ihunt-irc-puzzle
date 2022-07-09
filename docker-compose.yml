@@ -1,0 +1,16 @@
+---
+version: '3.8'
+
+services:
+  irc:
+    image: ghcr.io/ergochat/ergo:v2.10.0
+    volumes:
+      - "./ergo/ergo.yml:/ircd/ircd.yaml:ro"
+      - "./ergo/motd.motd:/ircd/motd.motd:ro"
+    ports: 
+      - "6667:6667"
+    restart: always
+
+  anna:
+    build: ./anna
+    restart: always
