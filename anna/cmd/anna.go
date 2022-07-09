@@ -144,27 +144,27 @@ func (a *Anna) checkMessage(text string) string {
 		return "Rule 5: Non-dictionary words are forbidden."
 	}
 
-	found := false
+	found := ""
 	for i := range a.colours {
 		if strings.Contains(text, a.colours[i]) {
-			found = true
+			found = a.colours[i]
 			break
 		}
 	}
-	if !found {
+	if found == "" {
 		return "Rule 6: Word must contain a colour from Joseph's Technicolour Dreamcoat"
 	}
 
-	if !strings.Contains(text, "black") {
-		return "Rule 7: The colour from rule 7 must be black."
-	}
-
-	if !strings.HasPrefix(text, "black") {
-		return "Rule 8: The colour from rule 7 must be at the start of the word."
-	}
-
 	if len(text) != 9 {
-		return "Rule 9: Words must be exactly 9 letters long"
+		return "Rule 7: Words must be exactly 9 letters long"
+	}
+
+	if !strings.HasPrefix(text, found) {
+		return "Rule 8: The colour from rule 6 must be at the start of the word."
+	}
+
+	if !strings.Contains(text, "black") {
+		return "Rule 9: The colour from rule 6 must be black."
 	}
 
 	if text != "blackjack" {
