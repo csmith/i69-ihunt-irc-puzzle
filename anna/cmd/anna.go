@@ -92,7 +92,7 @@ func main() {
 		channel := message.Params[0]
 
 		result := bot.checkMessage(body)
-		log.Printf("User %s said '%s' in %s result: %s", nick, body, channel, result)
+		must(bot.Send("PRIVMSG", "#admin", "User %s said '%s' in %s result: %s", nick, body, channel, result))
 		if result != correctString {
 			must(bot.Send("KICK", channel, nick, result))
 		}
@@ -132,20 +132,16 @@ func (a *Anna) checkMessage(text string) string {
 		return "Rule 2: No use of the letter 'E' is permitted."
 	}
 
-	if strings.ContainsAny(text, "iou") {
-		return "Rule 3: Vowels other than 'A' are not supported."
-	}
-
-	if len(text) < 5 {
-		return "Rule 4: Words must be at least 5 letters long."
+	if len(text) < 4 {
+		return "Rule 3: Words must be at least 4 letters long."
 	}
 
 	if len(text) > 10 {
-		return "Rule 5: Ain't nobody got time to read words longer than 10 letters."
+		return "Rule 4: Ain't nobody got time to read words longer than 10 letters."
 	}
 
 	if !a.words[text] {
-		return "Rule 6: Non-dictionary words are forbidden."
+		return "Rule 5: Non-dictionary words are forbidden."
 	}
 
 	found := false
@@ -156,23 +152,23 @@ func (a *Anna) checkMessage(text string) string {
 		}
 	}
 	if !found {
-		return "Rule 7: Word must contain a colour from Joseph's Technicolour Dreamcoat"
+		return "Rule 6: Word must contain a colour from Joseph's Technicolour Dreamcoat"
 	}
 
 	if !strings.Contains(text, "black") {
-		return "Rule 8: The colour from rule 7 must be black."
+		return "Rule 7: The colour from rule 7 must be black."
 	}
 
 	if !strings.HasPrefix(text, "black") {
-		return "Rule 9: The colour from rule 7 must be at the start of the word."
+		return "Rule 8: The colour from rule 7 must be at the start of the word."
 	}
 
 	if len(text) != 9 {
-		return "Rule 10: Words must be exactly 9 letters long"
+		return "Rule 9: Words must be exactly 9 letters long"
 	}
 
 	if text != "blackjack" {
-		return "Rule 11: Words must name a card game where you attempt to get close to - but not above - 21."
+		return "Rule 10: Words must name a card game where you attempt to get close to - but not above - 21."
 	}
 
 	return correctString
