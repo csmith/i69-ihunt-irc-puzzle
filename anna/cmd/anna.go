@@ -92,7 +92,7 @@ func main() {
 		channel := message.Params[0]
 
 		result := bot.checkMessage(body)
-		must(bot.Send("PRIVMSG", "#admin", "User %s said '%s' in %s result: %s", nick, body, channel, result))
+		must(bot.Send("PRIVMSG", "#admin", fmt.Sprintf("User %s said '%s' in %s result: %s", nick, body, channel, result)))
 		if result != correctString {
 			must(bot.Send("KICK", channel, nick, result))
 		}
