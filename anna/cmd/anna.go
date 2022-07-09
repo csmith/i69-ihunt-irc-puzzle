@@ -8,6 +8,7 @@ import (
 	"log"
 	"math/rand"
 	"strings"
+	"time"
 )
 
 type Anna struct {
@@ -24,6 +25,8 @@ func must(err error) {
 }
 
 func main() {
+	rand.Seed(time.Now().UnixNano())
+
 	bot := &Anna{
 		Connection: ircevent.Connection{
 			Server:   "irc:6667",
