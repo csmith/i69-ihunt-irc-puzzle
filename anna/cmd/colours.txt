@@ -26,3 +26,4 @@ purple
 white
 pink
 orange
+blue
