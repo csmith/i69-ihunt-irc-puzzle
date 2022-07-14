@@ -6,6 +6,10 @@ server:
 
     listeners:
         ":6667":
+        ":6697":
+            tls:
+                cert: fullchain.pem
+                key: privkey.pem          
 
     unix-bind-mode: 0777
 

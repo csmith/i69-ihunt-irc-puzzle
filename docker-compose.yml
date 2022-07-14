@@ -8,7 +8,8 @@ services:
       - "./ergo/ergo.yml:/ircd/ircd.yaml:ro"
       - "./ergo/motd.motd:/ircd/motd.motd:ro"
     ports: 
-      - "6667:6667"
+      - "6667:6667/tcp"
+      - "6697:6697/tcp"
     restart: always
 
   anna:
