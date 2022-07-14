@@ -127,16 +127,16 @@ func (a *Anna) checkMessage(text string) string {
 	text = strings.ToLower(text)
 	for i := range text {
 		if text[i] < 'a' || text[i] > 'z' {
-			return "Rule 1: A-Z only, no spaces, punctuation or accents."
+			return "Rule 1: Messages must not contain spaces, punctuation or special characters."
 		}
 	}
 
 	if len(text) < 4 {
-		return "Rule 2: Words must be at least 4 letters long."
+		return "Rule 2: Messages must be at least 4 letters long."
 	}
 
 	if len(text) > 10 {
-		return "Rule 3: Ain't nobody got time to read words longer than 10 letters."
+		return "Rule 3: Ain't nobody got time to read messages longer than 10 letters."
 	}
 
 	if !a.words[text] {
@@ -151,27 +151,31 @@ func (a *Anna) checkMessage(text string) string {
 		}
 	}
 	if found == "" {
-		return "Rule 5: Word must contain a colour from Joseph's Technicolour Dreamcoat"
+		return "Rule 5: Messages must contain a colour from Joseph's Technicolour Dreamcoat."
 	}
 
-	if len(text) != 9 {
-		return "Rule 6: Words must be exactly 9 letters long"
+	if len(text)%2 != 1 {
+		return "Rule 6: Messages must be an odd number of letters long."
 	}
 
 	if !strings.HasPrefix(text, found) {
-		return "Rule 7: The colour from rule 6 must be at the start of the word."
+		return "Rule 7: The colour from rule 6 must be at the start of the message."
 	}
 
 	if strings.ContainsRune(text, 'e') {
 		return "Rule 8: No use of the letter 'E' is permitted."
 	}
 
+	if len(text) != 9 {
+		return "Rule 9: Messages must be have a non-prime length."
+	}
+
 	if !strings.Contains(text, "black") {
-		return "Rule 9: The colour from rule 6 must be black."
+		return "Rule 10: The colour from rule 6 must be black."
 	}
 
 	if text != "blackjack" {
-		return "Rule 10: Words must name a card game where you attempt to get close to - but not above - 21."
+		return "Rule 11: Messages must name a card game where you attempt to get close to - but not above - 21."
 	}
 
 	return correctString
