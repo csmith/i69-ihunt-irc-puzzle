@@ -29,12 +29,13 @@ func main() {
 
 	bot := &Anna{
 		Connection: ircevent.Connection{
-			Server:   "irc:6667",
-			Nick:     "Anna",
-			RealName: "Anna",
-			UseSASL:  false,
-			UseTLS:   false,
-			Debug:    true,
+			Server:        "irc:6667",
+			Nick:          "Anna",
+			RealName:      "Anna",
+			UseSASL:       false,
+			UseTLS:        false,
+			Debug:         true,
+			ReconnectFreq: time.Second,
 		},
 		channels: make(map[string]string),
 		colours:  strings.Split(colours, "\n"),
