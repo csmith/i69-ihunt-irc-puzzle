@@ -152,31 +152,23 @@ func (a *Anna) checkMessage(text string) string {
 		}
 	}
 	if found == "" {
-		return "Rule 5: Messages must contain a colour from Joseph's Technicolour Dreamcoat."
+		return "Rule 5: Messages must have a colour from Joseph's Technicolour Dreamcoat somewhere within them."
 	}
 
 	if len(text)%2 != 1 {
 		return "Rule 6: Messages must be an odd number of letters long."
 	}
 
-	if !strings.HasPrefix(text, found) {
-		return "Rule 7: The colour from rule 6 must be at the start of the message."
-	}
-
-	if strings.ContainsRune(text, 'e') {
-		return "Rule 8: No use of the letter 'E' is permitted."
-	}
-
 	if len(text) != 9 {
-		return "Rule 9: Messages must be have a non-prime length."
+		return "Rule 7: Messages must be have a non-prime length."
 	}
 
 	if !strings.Contains(text, "black") {
-		return "Rule 10: The colour from rule 6 must be black."
+		return "Rule 8: The colour from rule 6 must be black."
 	}
 
 	if text != "blackjack" {
-		return "Rule 11: Messages must name a card game where you attempt to get close to - but not above - 21."
+		return "Rule 9: Messages must name a card game where you attempt to get close to - but not above - 21."
 	}
 
 	return correctString
