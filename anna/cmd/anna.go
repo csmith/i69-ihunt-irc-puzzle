@@ -42,22 +42,25 @@ func main() {
 		words:    loadWords(),
 	}
 
+	// Oper up as soon as we connect
 	bot.AddConnectCallback(func(message ircmsg.Message) {
 		must(bot.Send("OPER", "anna", "*Qc$ZRDB8WT2Kw"))
 	})
 
-	// RPL_YOUREOPER
+	// Once we're an oper, join the admin channel and set it up
 	bot.AddCallback("381", func(message ircmsg.Message) {
 		must(bot.Send("SAJOIN", bot.CurrentNick(), "#admin"))
 		must(bot.Send("SAMODE", "#admin", "+Cnsti"))
 	})
 
+	// Listen for server notices that tell us about clients connecting etc
 	bot.AddCallback("NOTICE", func(message ircmsg.Message) {
 		if !strings.ContainsRune(message.Source, '.') {
 			// Ignore notices that aren't from servers
 			return
 		}
 
+		// See if it's a client disconnecting - if so we'll close the channel created for them
 		var nick string
 		n, _ := fmt.Sscanf(message.Params[1], "\x0314-\x0fQUIT\x0314-\x03 %s exited the network", &nick)
 		if n == 1 {
@@ -67,11 +70,12 @@ func main() {
 			delete(bot.channels, nick)
 		}
 
+		// See if it's a client connecting - if so we'll make a channel for them and SAJOIN them into it
 		n, _ = fmt.Sscanf(message.Params[1], "\x0314-\x0fCONNECT\x0314-\x03 Client connected [%s", &nick)
 		if n == 1 {
 			nick = strings.TrimSuffix(nick, "]")
 			log.Printf("User connected: %s", nick)
-			channel := RandChannel()
+			channel := randChannel()
 			bot.channels[nick] = channel
 			must(bot.Send("SAJOIN", bot.CurrentNick(), channel))
 			must(bot.Send("TOPIC", channel, "Welcome! Feel free to chat but please be sure to obey all channel rules."))
@@ -79,6 +83,7 @@ func main() {
 			must(bot.Send("PRIVMSG", "#admin", fmt.Sprintf("New user connected - %s - joined to channel %s", nick, channel)))
 		}
 
+		// See if it's a nick change - so we can update our tracking of which channel belongs to which user
 		var newNick string
 		n, _ = fmt.Sscanf(message.Params[1], "\x0314-\x0fNICK\x0314-\x03 %s changed nickname to %s", &nick, &newNick)
 		if n == 2 {
@@ -90,6 +95,7 @@ func main() {
 		}
 	})
 
+	// Listen for normal messages, check they comply with the rules
 	bot.AddCallback("PRIVMSG", func(message ircmsg.Message) {
 		body := strings.Join(message.Params[1:], " ")
 		nick := strings.Split(message.Source, "!")[0]
@@ -124,6 +130,8 @@ func loadWords() map[string]bool {
 
 const correctString = "Correct"
 
+// checkMessage checks if the given text complies with our rules. Returns either the rule that was violated (in a
+// format suitable for passing to a user) or - if no rules were broken - correctString.
 func (a *Anna) checkMessage(text string) string {
 	text = strings.ToLower(text)
 	for i := range text {
@@ -174,12 +182,14 @@ func (a *Anna) checkMessage(text string) string {
 	return correctString
 }
 
-const letterBytes = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+// randChannel returns a random, 32-character long, channel name
+func randChannel() string {
+	const letterBytes = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
 
-func RandChannel() string {
 	b := make([]byte, 32)
 	for i := range b {
 		b[i] = letterBytes[rand.Intn(len(letterBytes))]
 	}
+
 	return "#" + string(b)
 }
