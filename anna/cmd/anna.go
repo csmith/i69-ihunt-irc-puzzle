@@ -171,12 +171,12 @@ func (a *Anna) checkMessage(text string) string {
 		return "Rule 7: Messages must be have a non-prime length."
 	}
 
-	if !strings.Contains(text, "black") {
-		return "Rule 8: The colour from rule 6 must be black."
+	if !strings.Contains(text, "peach") {
+		return "Rule 8: The colour from rule 6 must be peach."
 	}
 
-	if text != "blackjack" {
-		return "Rule 9: Messages must name a card game where you attempt to get close to - but not above - 21."
+	if text != "impeached" {
+		return "Rule 9: Messages must contain a word that describes a public official accused of a crime."
 	}
 
 	return correctString
