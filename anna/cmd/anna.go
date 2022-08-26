@@ -168,7 +168,7 @@ func (a *Anna) checkMessage(text string) string {
 	}
 
 	if len(text) != 9 {
-		return "Rule 7: Messages must be have a non-prime length."
+		return "Rule 7: Messages must have a non-prime length."
 	}
 
 	if !strings.Contains(text, "peach") {
